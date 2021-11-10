@@ -7,10 +7,9 @@ class Model:
         self.conn = None
         try:
             self.conn = ps.connect(
-                # "postgres", "postgres", "AnnaA.Korzh333:", "127.0.0.1", "5432"
                 database="postgres",
                 user='postgres',
-                password="AnnaA.Korzh333:",
+                password="********",
                 host='127.0.0.1',
                 port="5432",
             )
@@ -66,33 +65,16 @@ class Model:
         return self.get_el(f"select min({key_name}) from public.\"{table_name}\"")
 
     def print_products(self) -> None:
-        table = self.get(f"SELECT * FROM public.\"Product\"")
-        print('Product table:')
-        for row in table:
-            print('id_product:', row[0], '\ttitle:', row[1], '\tprice:', row[2], '\tcategory:', row[3],
-                  '\tid_catalog:', row[4], '\tid_order:', row[5])
-            print('_____________________________________')
+        return self.get(f"SELECT * FROM public.\"Product\"")
 
     def print_order(self) -> None:
-        table = self.get(f"SELECT * FROM public.\"Order\"")
-        print('Order table:')
-        for row in table:
-            print('id_order:', row[0], '\tcustomer_name:', row[1], '\tid_shop:', row[2], '\tdate:', row[3])
-            print('_____________________________________')
+        return self.get(f"SELECT * FROM public.\"Order\"")
 
     def print_catalog(self) -> None:
-        table = self.get(f"SELECT * FROM public.\"Catalog\"")
-        print('Catalog table:')
-        for row in table:
-            print('id_catalog:', row[0], '\tname:', row[1], '\tid_shop:', row[2], '\tpid_catalog:', row[3])
-            print('_____________________________________')
+        return self.get(f"SELECT * FROM public.\"Catalog\"")
 
     def print_shop(self) -> None:
-        table = self.get(f"SELECT * FROM public.\"Shop\"")
-        print('Shop table:')
-        for row in table:
-            print('id_shop:', row[0], '\taddress:', row[1], '\tname:', row[2])
-            print('_____________________________________')
+        return self.get(f"SELECT * FROM public.\"Shop\"")
 
     def delete_data(self, table_name: str, key_name: str, key_value) -> None:
         self.request(f"DELETE FROM public.\"{table_name}\" WHERE {key_name}={key_value};")
@@ -174,48 +156,25 @@ class Model:
 
     def search_data_two_tables(self, table1_name: str, table2_name: str, table1_key, table2_key,
                                search: str):
-        found = self.get(f"select * from public.\"{table1_name}\" as one inner join public.\"{table2_name}\" as two "
-                         f"on one.\"{table1_key}\"=two.\"{table2_key}\" "
-                         f"where {search}")
-        print('search result:')
-        for row in found:
-            for i in range(0, len(row)):
-                print(row[i])
-            print('_____________________________________')
+        return self.get(f"select * from public.\"{table1_name}\" as one inner join public.\"{table2_name}\" as two "
+                        f"on one.\"{table1_key}\"=two.\"{table2_key}\" "
+                        f"where {search}")
 
     def search_data_three_tables(self, table1_name: str, table2_name: str, table3_name: str,
                                  table1_key, table2_key, table3_key, table13_key,
                                  search: str):
-        found = self.get(f"select * from public.\"{table1_name}\" as one inner join public.\"{table2_name}\" as two "
-                         f"on one.\"{table1_key}\"=two.\"{table2_key}\" inner join public.\"{table3_name}\" as three "
-                         f"on three.\"{table3_key}\"=one.\"{table13_key}\""
-                         f"where {search}")
-        print('search result:')
-        for row in found:
-            for i in range(0, len(row)):
-                print(row[i])
-            print('_____________________________________')
+        return self.get(f"select * from public.\"{table1_name}\" as one inner join public.\"{table2_name}\" as two "
+                        f"on one.\"{table1_key}\"=two.\"{table2_key}\" inner join public.\"{table3_name}\" as three "
+                        f"on three.\"{table3_key}\"=one.\"{table13_key}\""
+                        f"where {search}")
 
     def search_data_all_tables(self, table1_name: str, table2_name: str, table3_name: str, table4_name: str,
                                table1_key, table2_key, table3_key, table13_key,
                                table4_key, table24_key,
                                search: str):
-        found = self.get(f"select * from public.\"{table1_name}\" as one inner join public.\"{table2_name}\" as two "
-                         f"on one.\"{table1_key}\"=two.\"{table2_key}\" inner join public.\"{table3_name}\" as three "
-                         f"on three.\"{table3_key}\"=one.\"{table13_key}\" inner join public.\"{table4_name}\" as four "
-                         f"on four.\"{table4_key}\"=two.\"{table24_key}\""
-                         f"where {search}")
-        print('search result:')
-        for row in found:
-            for i in range(0, len(row)):
-                print(row[i])
-            print('_____________________________________')
+        return self.get(f"select * from public.\"{table1_name}\" as one inner join public.\"{table2_name}\" as two "
+                        f"on one.\"{table1_key}\"=two.\"{table2_key}\" inner join public.\"{table3_name}\" as three "
+                        f"on three.\"{table3_key}\"=one.\"{table13_key}\" inner join public.\"{table4_name}\" as four "
+                        f"on four.\"{table4_key}\"=two.\"{table24_key}\""
+                        f"where {search}")
 
-    def numeric_search(self, a: int, b: int, key: str):
-        return f"{a}<{key} and {key}<{b}"
-
-    def string_search(self, string: str, key: str):
-        return f"{key} LIKE \'{string}\'"
-
-    def date_search(self, datetime1: datetime.datetime, datetime2: datetime.datetime, key: str):
-        return f"{key} BETWEEN \'{datetime1}\' AND \'{datetime2}\'"
